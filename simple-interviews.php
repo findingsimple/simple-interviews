@@ -4,7 +4,7 @@ Plugin Name: Simple Interviews
 Plugin URI: http://plugins.findingsimple.com
 Description: Build a library of interviews.
 Version: 1.0
-Author: Finding Simple ( Jason Conroy & Brent Shepherd)
+Author: Finding Simple ( Jason Conroy & Brent Shepherd )
 Author URI: http://findingsimple.com
 License: GPL2
 */
