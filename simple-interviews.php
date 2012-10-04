@@ -202,19 +202,28 @@ class Simple_Interviews {
 ?>
 
 		<p>
-			<label for="quote-citation-source-name"><?php _e( 'Source Name:', self::$text_domain ); ?></label>
+			<label for="interviewee-name"><?php _e( 'Interviewee Name:', self::$text_domain ); ?></label>
 			<br />
-			<input type="text" name="quote-citation-source-name" id="quote-citation-source-name"
-				value="<?php echo esc_attr( get_post_meta( $object->ID, 'quote-citation-source-name', true ) ); ?>"
+			<input type="text" name="interviewee-name" id="interviewee-name"
+				value="<?php echo esc_attr( get_post_meta( $object->ID, 'interviewee-name', true ) ); ?>"
+				size="30" tabindex="30" style="width: 99%;" />
+		</p>
+
+		<p>
+			<label for="interviewee-company"><?php _e( 'Interviewee Company:', self::$text_domain ); ?></label>
+			<br />
+			<input type="text" name="interviewee-company" id="interviewee-company"
+				value="<?php echo esc_attr( get_post_meta( $object->ID, 'interviewee-company', true ) ); ?>"
 				size="30" tabindex="30" style="width: 99%;" />
 		</p>
 		
 		<p>
-			<label for="quote-citation-source-url"><?php _e( 'Source URL:', self::$text_domain ); ?></label>
+			<label for="interviewer-name"><?php _e( 'Interviewer Name:', self::$text_domain ); ?></label>
 			<br />
-			<input type="url" name="quote-citation-source-url" id="quote-citation-source-url"
-				value="<?php echo esc_attr( get_post_meta( $object->ID, 'quote-citation-source-url', true ) ); ?>"
+			<input type="text" name="interviewer-name" id="interviewer-name"
+				value="<?php echo esc_attr( get_post_meta( $object->ID, 'interviewer-name', true ) ); ?>"
 				size="30" tabindex="30" style="width: 99%;" />
+			<p><span style="color:#aaa;">Can be used within theme templates instead of the WP author/user assigned to the post.</span></p>
 		</p>
 
 <?php
@@ -234,8 +243,9 @@ class Simple_Interviews {
 			return $post_id;
 
 		$meta = array(
-			'quote-citation-source-name',
-			'quote-citation-source-url'
+			'interviewee-name',
+			'interviewee-company',
+			'interviewer-name'
 		);
 
 		foreach ( $meta as $meta_key ) {
