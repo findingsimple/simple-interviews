@@ -226,6 +226,15 @@ class Simple_Interviews {
 			<p><span style="color:#aaa;">Can be used within theme templates instead of the WP author/user assigned to the post.</span></p>
 		</p>
 
+		<p>
+			<label for="interviewer-name"><?php _e( 'Interviewer Company:', self::$text_domain ); ?></label>
+			<br />
+			<input type="text" name="interviewer-company" id="interviewer-company"
+				value="<?php echo esc_attr( get_post_meta( $object->ID, 'interviewer-company', true ) ); ?>"
+				size="30" tabindex="30" style="width: 99%;" />
+			<p><span style="color:#aaa;">Can be used within theme templates for additional information about the interview.</span></p>
+		</p>
+
 <?php
 	}
 
@@ -245,7 +254,8 @@ class Simple_Interviews {
 		$meta = array(
 			'interviewee-name',
 			'interviewee-company',
-			'interviewer-name'
+			'interviewer-name',
+			'interviewer-company'
 		);
 
 		foreach ( $meta as $meta_key ) {
