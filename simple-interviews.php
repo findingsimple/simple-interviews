@@ -205,7 +205,7 @@ class Simple_Interviews {
 			<label for="interviewee-name"><?php _e( 'Interviewee Name:', self::$text_domain ); ?></label>
 			<br />
 			<input type="text" name="interviewee-name" id="interviewee-name"
-				value="<?php echo esc_attr( get_post_meta( $object->ID, 'interviewee-name', true ) ); ?>"
+				value="<?php echo esc_attr( get_post_meta( $object->ID, '_interviewee-name', true ) ); ?>"
 				size="30" tabindex="30" style="width: 99%;" />
 		</p>
 
@@ -213,7 +213,7 @@ class Simple_Interviews {
 			<label for="interviewee-company"><?php _e( 'Interviewee Company:', self::$text_domain ); ?></label>
 			<br />
 			<input type="text" name="interviewee-company" id="interviewee-company"
-				value="<?php echo esc_attr( get_post_meta( $object->ID, 'interviewee-company', true ) ); ?>"
+				value="<?php echo esc_attr( get_post_meta( $object->ID, '_interviewee-company', true ) ); ?>"
 				size="30" tabindex="30" style="width: 99%;" />
 		</p>
 		
@@ -221,16 +221,16 @@ class Simple_Interviews {
 			<label for="interviewer-name"><?php _e( 'Interviewer Name:', self::$text_domain ); ?></label>
 			<br />
 			<input type="text" name="interviewer-name" id="interviewer-name"
-				value="<?php echo esc_attr( get_post_meta( $object->ID, 'interviewer-name', true ) ); ?>"
+				value="<?php echo esc_attr( get_post_meta( $object->ID, '_interviewer-name', true ) ); ?>"
 				size="30" tabindex="30" style="width: 99%;" />
 			<p><span style="color:#aaa;">Can be used within theme templates instead of the WP author/user assigned to the post.</span></p>
 		</p>
 
 		<p>
-			<label for="interviewer-name"><?php _e( 'Interviewer Company:', self::$text_domain ); ?></label>
+			<label for="interviewer-company"><?php _e( 'Interviewer Company:', self::$text_domain ); ?></label>
 			<br />
 			<input type="text" name="interviewer-company" id="interviewer-company"
-				value="<?php echo esc_attr( get_post_meta( $object->ID, 'interviewer-company', true ) ); ?>"
+				value="<?php echo esc_attr( get_post_meta( $object->ID, '_interviewer-company', true ) ); ?>"
 				size="30" tabindex="30" style="width: 99%;" />
 			<p><span style="color:#aaa;">Can be used within theme templates for additional information about the interview.</span></p>
 		</p>
@@ -262,103 +262,21 @@ class Simple_Interviews {
 			$new_meta_value = $_POST[$meta_key];
 
 			/* Get the meta value of the custom field key. */
-			$meta_value = get_post_meta( $post_id, $meta_key, true );
+			$meta_value = get_post_meta( $post_id, '_' . $meta_key , true );
 
 			/* If there is no new meta value but an old value exists, delete it. */
 			if ( '' == $new_meta_value && $meta_value )
-				delete_post_meta( $post_id, $meta_key, $meta_value );
+				delete_post_meta( $post_id, '_' . $meta_key , $meta_value );
 
 			/* If a new meta value was added and there was no previous value, add it. */
 			elseif ( $new_meta_value && '' == $meta_value )
-				add_post_meta( $post_id, $meta_key, $new_meta_value, true );
+				add_post_meta( $post_id, '_' . $meta_key , $new_meta_value, true );
 
 			/* If the new meta value does not match the old value, update it. */
 			elseif ( $new_meta_value && $new_meta_value != $meta_value )
-				update_post_meta( $post_id, $meta_key, $new_meta_value );
+				update_post_meta( $post_id, '_' . $meta_key , $new_meta_value );
 		}
 	}
-
-	/**
-	 * Method overloading
-	 *
-	 * Provides a "the_*" for the "get_*" methods. If the corresponding method
-	 * does not exist, triggers an error.
-	 *
-	 * @param string $name Method name
-	 * @param array $args Arguments to pass to method
-	 */
-	public static function __callStatic($name, $args) {
-	
-		$get_method = 'get_' . substr($name, 4);
-		
-		if (substr($name, 0, 4) === 'the_' && method_exists(__CLASS__, $get_method)) {
-			echo call_user_func_array(array(__CLASS__, $get_method), $args);
-			return;
-		}
-
-		// No luck finding the method, do the same as normal PHP calls
-		$trace = debug_backtrace();
-		$file = $trace[0]['file'];
-		$line = $trace[0]['line'];
-		trigger_error('Call to undefined method ' . __CLASS__ . '::' . $name . "() in $file on line $line", E_USER_ERROR);
-		
-	}
-
-	/**#@+
-	 * @internal Template tag for use in templates
-	 */
-	/**
-	 * Get the quote source's name
-	 *
-	 * @param int $post_ID Post ID. Defaults to the current post's ID
-	 */
-	public static function get_source( $post_ID = 0 ) {
-	
-		if ( absint($post_ID) === 0 )
-			$post_ID = $GLOBALS['post']->ID;
-
-		return get_post_meta($post_ID, 'quote-citation-source-name', true);
-		
-	}
-
-	/**
-	 * Get the quote source's URL
-	 *
-	 * @param int $post_ID Post ID. Defaults to the current post's ID
-	 */
-	public static function get_source_url($post_ID = 0) {
-	
-		if ( absint($post_ID) === 0 )
-			$post_ID = $GLOBALS['post']->ID;
-
-		return get_post_meta($post_ID, 'quote-citation-source-url', true);
-		
-	}
-	
-	/**
-	 * Get a link to the quote source
-	 *
-	 * Either returns the source name, or if the source URL has been set,
-	 * returns a HTML link to the source.
-	 *
-	 * @param int $post_ID Post ID. Defaults to the current post's ID
-	 */
-	public static function get_source_link( $post_ID = 0 ) {
-	
-		$source = self::get_source( $post_ID );
-
-		if ( empty( $source ) )
-			return '';
-
-		$url = self::get_source_url($post_ID);
-		
-		if ( !empty( $url ) )
-			return sprintf('<a href="%1$s" title="%2$s">%2$s</a>', $url , $source );
-
-		return $source;
-		
-	}
-	/**#@-*/
 
 	/**
 	 * Build interview shortcode.
