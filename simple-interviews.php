@@ -202,6 +202,14 @@ class Simple_Interviews {
 ?>
 
 		<p>
+			<label for="interview-date"><?php _e( 'Interview Date:', self::$text_domain ); ?></label>
+			<br />
+			<input type="text" name="interview-date" id="interview-date"
+				value="<?php echo esc_attr( get_post_meta( $object->ID, '_interview-date', true ) ); ?>"
+				size="30" tabindex="30" style="width: 99%;" />
+		</p>
+
+		<p>
 			<label for="interviewee-name"><?php _e( 'Interviewee Name:', self::$text_domain ); ?></label>
 			<br />
 			<input type="text" name="interviewee-name" id="interviewee-name"
@@ -252,6 +260,7 @@ class Simple_Interviews {
 			return $post_id;
 
 		$meta = array(
+			'interview-date',
 			'interviewee-name',
 			'interviewee-company',
 			'interviewer-name',
