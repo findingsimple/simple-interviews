@@ -374,7 +374,7 @@ class Simple_Interviews {
 			return;
 				
 		if ( function_exists('the_post_thumbnail') )
-			echo '<a href="' . get_edit_post_link( $post_id ) . '" title="' . __( 'Edit Sponsor', self::$text_domain ) . '">' . get_the_post_thumbnail( $post_id, 'sponsor-admin-thumb' ) . '</a>';
+			echo '<a href="' . get_edit_post_link( $post_id ) . '" title="' . __( 'Edit Sponsor', self::$text_domain ) . '">' . get_the_post_thumbnail( $post_id, 'interview-admin-thumb' ) . '</a>';
 					
 	}
 
